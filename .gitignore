@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+
+# Data is rebuilt from the pull scripts; don't commit it.
+data/raw/
+data/processed/
+data/*.duckdb
+data/*.duckdb.wal
