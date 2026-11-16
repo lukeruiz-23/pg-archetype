@@ -26,11 +26,25 @@ from nba_api.stats.endpoints import LeagueDashPtStats
 from src.config import SEASONS
 from src.pull.nba_client import fetch_cached
 
-MEASURES = ["Drives", "PullUpShot", "Passing"]
+MEASURES = ["Drives", "PullUpShot", "Passing", "Possessions", "CatchShoot"]
 
 
 def main() -> None:
-    raise NotImplementedError
+    for season in SEASONS:
+        for measure in MEASURES:
+            print(f"{season} {measure}")
+            df = fetch_cached(
+                LeagueDashPtStats,
+                out_path=f"tracking/{measure.lower()}/{season}.parquet",
+                season = season,
+                season_type_all_star = "Regular Season",
+                player_or_team = "Player",
+                per_mode_simple = "Totals",
+                pt_measure_type = measure,
+            )
+            print(f"  {len(df)} rows")
+            
+        
 
 
 if __name__ == "__main__":
