@@ -24,7 +24,17 @@ from src.pull.nba_client import fetch_cached
 
 
 def main() -> None:
-    raise NotImplementedError("Write the season loop here")
+    for season in SEASONS:
+        print(season)
+        df = fetch_cached(
+            LeagueDashPlayerBioStats,
+            out_path=f"bio/{season}.parquet",
+            season = season,
+            season_type_all_star = "Regular Season",
+            per_mode_simple = "Totals"
+
+        )
+        print(f"  {len(df) } rows")
 
 
 if __name__ == "__main__":
