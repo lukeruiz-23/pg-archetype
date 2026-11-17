@@ -25,9 +25,34 @@ from nba_api.stats.endpoints import LeagueDashPtDefend, LeagueHustleStatsPlayer
 from src.config import SEASONS
 from src.pull.nba_client import fetch_cached
 
+HUSTLE_SEASONS = [s for s in SEASONS if s >= "2016-2017"]
 
 def main() -> None:
-    raise NotImplementedError
+        for season in SEASONS:
+                print(f"{season}")
+                df = fetch_cached(
+                        LeagueDashPtDefend,
+                        out_path=f"rim_defense/{season}.parquet",
+                        season = season,
+                        season_type_all_star = "Regular Season", 
+                        per_mode_simple = "Totals",
+                        defense_category = "Less Than 6Ft",
+                )
+                print(f" {len(df)} rows")
+        
+        for season in SEASONS:
+                print(f"{season}")
+                df = fetch_cached(
+                        LeagueHustleStatsPlayer,
+                        out_path=f"hustle/{season}.parquet",
+                        season = season,
+                        season_type_all_star= "Regular Season",
+                        per_mode_time = "Totals",
+
+                )
+                print(f" {len(df)} rows")
+
+
 
 
 if __name__ == "__main__":
