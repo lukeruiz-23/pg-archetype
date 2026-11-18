@@ -33,7 +33,30 @@ from src.pull.nba_client import fetch_cached
 
 
 def main() -> None:
-    raise NotImplementedError
+    team_ids = [t["id"] for t in teams.get_teams()]
+
+    for season in SEASONS:
+        for team_id in team_ids:
+            print(f"on/off {season} {team_id}")
+            params = dict(
+                team_id = team_id,
+                season = season,
+                season_type_all_star = "Regular Season",
+                measure_type_detailed_defense = "Advanced",
+                per_mode_detailed = "Totals",
+            )
+            fetch_cached(
+                TeamPlayerOnOffSummary,
+                out_path=f"on_off/off/{season}/{team_id}.parquet",
+                dataset_index = 2,
+                **params,
+            )
+            fetch_cached(
+                TeamPlayerOnOffSummary,
+                out_path = f"on_off/on/{season}/{team_id}.parquet",
+                dataset_index = 1,
+                **params,
+            )
 
 
 if __name__ == "__main__":
