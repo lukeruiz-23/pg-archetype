@@ -13,20 +13,29 @@ import duckdb
 
 from src.config import DB_PATH, RAW_DIR
 
-# table name -> folder under data/raw/ (glob)
-# The first entry is done; add one line per pull script as you finish it.
+
 TABLES = {
+    # Player-season box score
     "raw_player_base": "player_seasons/base/*.parquet",
     "raw_player_advanced": "player_seasons/advanced/*.parquet",
-    # TODO "raw_bio": ...
-    # TODO "raw_tracking_drives": ...
-    # TODO "raw_tracking_pullup": ...
-    # TODO "raw_tracking_passing": ...
-    # TODO "raw_rim_defense": ...
-    # TODO "raw_hustle": ...
-    # TODO "raw_on_court": "on_off/on/*/*.parquet"   (two levels: season/team)
-    # TODO "raw_off_court": ...
-    # TODO "raw_lineups_2man": ...
+    "raw_bio": "bio/*.parquet",
+
+    # Tracking (style features for clustering)
+    "raw_tracking_drives": "tracking/drives/*.parquet",
+    "raw_tracking_pullup": "tracking/pullupshot/*.parquet",
+    "raw_tracking_passing": "tracking/passing/*.parquet",
+    "raw_tracking_possessions": "tracking/possessions/*.parquet",
+    "raw_tracking_catchshoot": "tracking/catchshoot/*.parquet",
+
+    # Defense
+    "raw_rim_defense": "rim_defense/*.parquet",
+    "raw_hustle": "hustle/*.parquet",          # 2016-17 onward only (decisions log)
+
+    # Team context: two folder levels (season/team)
+    "raw_on_court": "on_off/on/*/*.parquet",
+    "raw_off_court": "on_off/off/*/*.parquet",
+    "raw_lineups_2man": "lineups/2man/*/*.parquet",
+    "raw_lineups_5man": "lineups/5man/*/*.parquet",
 }
 
 
