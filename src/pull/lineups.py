@@ -19,13 +19,37 @@ minutes. Look at the distribution of MIN once you have the data, then pick.
 """
 
 from nba_api.stats.endpoints import LeagueDashLineups
+from nba_api.stats.static import teams
 
 from src.config import SEASONS
 from src.pull.nba_client import fetch_cached
 
+GROUP_SIZES = [2, 5]
+API_ROW_CAP = 2000
 
 def main() -> None:
-    raise NotImplementedError
+    team_ids = [t["id"] for t in teams.get_teams()]           # NEW: same as on_off.py
+
+    for season in SEASONS:
+        for team_id in team_ids:                              # NEW: team loop
+            for group_size in GROUP_SIZES:
+                print(f"lineups {season} {team_id} {group_size}-man")
+                df = fetch_cached(
+                    LeagueDashLineups,
+                    out_path=f"lineups/{group_size}man/{season}/{team_id}.parquet",  # NEW: team in path
+                    season=season,
+                    season_type_all_star="Regular Season",
+                    measure_type_detailed_defense="Advanced",
+                    per_mode_detailed="Totals",
+                    group_quantity=group_size,
+                    team_id_nullable=team_id,                 # NEW: filter to one team
+                )
+                print(f"  {len(df)} rows")
+
+               
+                assert len(df) < API_ROW_CAP, (
+                    f"Hit the {API_ROW_CAP}-row cap: {season} team {team_id} {group_size}-man"
+                )
 
 
 if __name__ == "__main__":
